@@ -175,6 +175,48 @@ Since Docker couldn't be run locally, we used AWS CodeBuild to build the Docker 
    - Create a new rule with a schedule expression.
    - Set the target as your ECS task to automate execution.
 
+## Rollback Steps
+
+### Step 1: Delete the ECS Cluster
+- **Navigate to the ECS Console** in AWS.
+- Find the cluster (`basic_microservice_cluster`) you created.
+- **Select the cluster**, and click on **"Delete Cluster"**.
+- This action will terminate any running tasks and remove the cluster.
+
+### Step 2: Deregister the Task Definition
+- **Navigate to Task Definitions** in the ECS Console.
+- Locate the task definition (`basic_microservice_task`).
+- **Select the task definition**, and choose **"Actions"** > **"Deregister"**.
+- Deregistering the task definition will prevent any future tasks from being launched using this version.
+
+### Step 3: Delete the ECR Repository
+- **Go to the Amazon ECR Console**.
+- Find the repository (`basic_microservice_repo`) you created.
+- **Select the repository**, and click on **"Delete"**.
+- Make sure to confirm that you want to delete the repository along with any images stored in it.
+
+### Step 4: Delete CodeBuild Project
+- **Navigate to CodeBuild Console**.
+- Find the project you created to build the Docker image.
+- **Select the project**, and click on **"Delete"**.
+- This will remove the CodeBuild configuration, and you won't be billed for this resource anymore.
+
+### Step 5: Delete CloudWatch Log Groups (Optional)
+- **Go to the CloudWatch Console** and navigate to **Logs**.
+- Look for the **log group** associated with the ECS tasks (e.g., `/ecs/basic_microservice_logs`).
+- **Select the log group**, and click on **"Delete Log Group"**.
+- This will clean up any log data stored from the running tasks.
+
+### Step 6: Delete IAM Roles (Optional)
+- If you created any **IAM roles** specifically for ECS or CodeBuild that aren't being used elsewhere:
+  - **Go to the IAM Console**.
+  - **Select the role**, and ensure that it's not being used by other services.
+  - **Delete the role** to ensure that there are no lingering permissions.
+
+### Step 7: Clean Up Local Resources
+- **Delete the Project Folder** (`BasicMicroserviceProject`) from your local machine if you no longer need it.
+- This includes `main.py`, `config.yaml`, `requirements.txt`, `Dockerfile`, and `buildspec.yml`.
+
 ## Summary
 
 1. **Create a Python script**, configuration file, and requirements file.
@@ -182,6 +224,7 @@ Since Docker couldn't be run locally, we used AWS CodeBuild to build the Docker 
 3. **Deploy the container** in an ECS cluster using Fargate.
 4. **Run and monitor** the microservice using ECS and CloudWatch Logs.
 5. Optionally, use **EventBridge** to schedule the task.
+6. **Rollback Steps**: Delete the ECS cluster, deregister the task definition, delete the ECR repository, delete the CodeBuild project, delete CloudWatch logs, delete IAM roles, and clean up local resources.
 
-With these steps, your Python microservice is now deployed in AWS, running serverlessly in ECS, and can be easily managed and scaled as needed.
+With these steps, your Python microservice is now deployed in AWS, running serverlessly in ECS, and can be easily managed and scaled as needed. The rollback steps ensure that all resources are safely cleaned up if needed.
 
