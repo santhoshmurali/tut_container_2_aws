@@ -98,7 +98,15 @@ Since Docker couldn't be run locally, we used AWS CodeBuild to build the Docker 
 
    - Go to the AWS Management Console, search for **ECR**, and create a new repository named `basic_microservice_repo`.
 
-2. **Create `buildspec.yml`**:
+2. **Service Role Permissions**:
+
+   - Make sure the IAM role used by CodeBuild has the necessary permissions to interact with Amazon ECR.
+      - You may need to attach the following managed policies to your role:
+         - AmazonEC2ContainerRegistryFullAccess
+         - AmazonS3FullAccess
+         - CloudWatchLogsFullAccess
+
+3. **Create `buildspec.yml`**:
 
    - Create a `buildspec.yml` file in your `BasicMicroserviceProject` folder:
 
@@ -132,13 +140,13 @@ Since Docker couldn't be run locally, we used AWS CodeBuild to build the Docker 
 
    Replace `<your-region>` and `<your-account-id>` with your AWS region and account ID.
 
-3. **Set Up CodeBuild Project**:
+4. **Set Up CodeBuild Project**:
 
    - Go to **CodeBuild** in AWS Console, create a new project, and link it to your source code (e.g., GitHub or S3 bucket).
    - Use the **buildspec.yml** you created.
    - Make sure the environment image supports Docker.
 
-4. **Run CodeBuild**:
+5. **Run CodeBuild**:
 
    - Run the CodeBuild project, and it will build the Docker image and push it to ECR.
 
