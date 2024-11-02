@@ -14,5 +14,7 @@ RUN pip install -r requirements.txt
 # Copy the rest of the application code to the container
 COPY . /app
 
+WORKDIR /app/program
+
 # Set the command to run the script
-CMD ["python", "program\main.py"]
+CMD ["python", "main.py"]

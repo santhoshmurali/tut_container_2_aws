@@ -6,7 +6,7 @@ def load_config(config_path):
     return config
 
 def main():
-    config = load_config(r'config\\config.yaml')
+    config = load_config(r'..\\config\\config.yaml')
     message = config.get('message','hello docker')
 
     print(f"message from config : { message }")
